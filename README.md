@@ -121,21 +121,6 @@ in your browser.
 
 ---
 
-# 🌍 Deployment
-
-This project can be deployed easily using:
-
-* Vercel
-* Netlify
-* GitHub Pages
-
-For Vercel deployment:
-
-1. Push the repository to GitHub
-2. Import the repository into Vercel
-3. Deploy directly without any build configuration
-
----
 
 # 📸 Highlights
 
