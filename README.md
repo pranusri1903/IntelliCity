@@ -14,12 +14,14 @@ Originally conceptualized as a Data Structures & Algorithms project in C++, this
 * 🛣️ Dynamic Road Network Visualization
 * 🚦 Smart Traffic Signal Optimization
 * 🚑 Emergency Vehicle Dispatch System
-* 📍 Shortest Path Routing using Dijkstra’s Algorithm
+* 📍 Shortest Path Routing using Dijkstra’s Algorithm (binary min-heap priority queue)
 * 🔄 Alternate Route Detection using BFS
 * 🧭 Network Traversal using DFS
 * 📊 All-Pairs Routing using Floyd-Warshall Algorithm
+* 🌲 Minimum Spanning Tree Infrastructure Planning using Kruskal's Algorithm & Union-Find
 * 📈 Real-Time Congestion Monitoring
-* 🚧 Road Blocking & Rerouting Simulation
+* 🚧 Road Blocking & Rerouting Simulation (including parallel/multi-edge roads)
+* 🚑 Auto-expiring Emergency Signal Overrides
 * 🚘 Vehicle Registry & Simulation
 * 🧠 Algorithm Visualisation & Analysis
 * 🎨 Futuristic Cyberpunk-inspired UI Design
@@ -47,6 +49,10 @@ Used for complete network traversal and connectivity verification.
 ### Greedy Traffic Optimization
 
 Dynamically adjusts traffic signal timing based on vehicle density. 
+
+### Kruskal's Algorithm (Minimum Spanning Tree)
+
+Uses a disjoint-set (union-find) structure to compute the minimum-cost subset of roads needed to keep every junction connected — used for optimal infrastructure planning.
 
 ---
 
@@ -77,7 +83,8 @@ The web interface provides an interactive visualization of the city graph and li
 
 * Graph Theory
 * Adjacency Lists
-* Priority Queues
+* Priority Queues (custom binary min-heap)
+* Disjoint Set / Union-Find
 * Dynamic Programming
 * Greedy Algorithms
 * Graph Traversal Algorithms
@@ -89,8 +96,14 @@ The web interface provides an interactive visualization of the city graph and li
 ```bash
 IntelliCity/
 │
-├── index.html
-├── README.md
+├── index.html          # Markup only
+├── css/
+│   └── style.css       # All styling
+├── js/
+│   ├── data.js          # Junctions, roads, vehicles, adjacency list, signal state
+│   ├── algorithms.js    # Dijkstra (min-heap), BFS, DFS, Floyd-Warshall, Kruskal/Union-Find
+│   └── app.js           # Rendering, event handlers, simulation loop
+└── README.md
 ```
 
 ---
