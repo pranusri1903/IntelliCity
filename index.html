@@ -11,6 +11,7 @@
 
 <!-- HEADER -->
 <header>
+  <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()" aria-label="Toggle navigation">☰</button>
   <div class="logo">
     <svg class="logo-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="21" cy="21" r="19" stroke="#00e5ff" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.5"/>
@@ -36,6 +37,8 @@
 </header>
 
 <div class="app">
+
+  <div class="nav-backdrop" id="nav-backdrop" onclick="closeNav()"></div>
 
   <!-- LEFT NAV -->
   <nav class="sidebar-nav">
@@ -132,23 +135,27 @@
         <div>
           <div class="panel">
             <div class="panel-title">Junction Overview</div>
+            <div class="table-scroll">
             <table class="data-table">
               <thead>
                 <tr><th>ID</th><th>Name</th><th>Zone</th><th>Vehicles</th><th>Congestion</th></tr>
               </thead>
               <tbody id="junction-table-body"></tbody>
             </table>
+            </div>
           </div>
         </div>
         <div>
           <div class="panel">
             <div class="panel-title">Top Congested Roads</div>
+            <div class="table-scroll">
             <table class="data-table">
               <thead>
                 <tr><th>Road</th><th>From→To</th><th>Congestion</th></tr>
               </thead>
               <tbody id="road-congestion-body"></tbody>
             </table>
+            </div>
           </div>
           <div class="panel">
             <div class="panel-title">Zone Summary</div>
@@ -263,10 +270,12 @@
         <button class="btn-run" style="width:auto; padding:10px 28px;" onclick="renderMST()">⚡ COMPUTE MST</button>
         <div id="mst-summary" style="margin-top:16px;"></div>
         <div class="section-head" style="margin-top:20px;">Selected Roads</div>
+        <div class="table-scroll">
         <table class="data-table">
           <thead><tr><th>Road Name</th><th>From</th><th>To</th><th>Distance</th></tr></thead>
           <tbody id="mst-table-body"></tbody>
         </table>
+        </div>
       </div>
     </div>
 
@@ -278,12 +287,14 @@
           <button class="btn-run" style="width:auto;padding:9px 20px;" onclick="optimizeSignals()">⚡ OPTIMIZE SIGNALS (GREEDY)</button>
           <button class="btn-secondary" style="width:auto;padding:9px 20px;" onclick="renderSignals()">↻ REFRESH</button>
         </div>
+        <div class="table-scroll">
         <table class="data-table" id="signal-table">
           <thead>
             <tr><th>Junction</th><th>Zone</th><th>Phase</th><th>Vehicle Density</th><th>Green</th><th>Red</th><th>Emergency</th></tr>
           </thead>
           <tbody id="signal-table-body"></tbody>
         </table>
+        </div>
       </div>
     </div>
 
@@ -330,10 +341,12 @@
         <div class="section-head">Top Congested Junctions</div>
         <div id="congestion-junctions"></div>
         <div class="section-head" style="margin-top:20px;">Road Congestion Ranking</div>
+        <div class="table-scroll">
         <table class="data-table">
           <thead><tr><th>Road Name</th><th>From</th><th>To</th><th>Distance</th><th>Congestion</th><th>Status</th></tr></thead>
           <tbody id="congestion-roads-body"></tbody>
         </table>
+        </div>
       </div>
     </div>
 
@@ -341,10 +354,12 @@
     <div class="view" id="view-roads">
       <div class="panel">
         <div class="panel-title">Road Network</div>
+        <div class="table-scroll">
         <table class="data-table">
           <thead><tr><th>Road Name</th><th>From</th><th>To</th><th>Distance (m)</th><th>Bidirectional</th><th>Congestion</th><th>Status</th></tr></thead>
           <tbody id="road-table-body"></tbody>
         </table>
+        </div>
       </div>
       <div class="panel">
         <div class="panel-title">Block / Unblock Road</div>
@@ -383,10 +398,12 @@
     <div class="view" id="view-vehicles">
       <div class="panel">
         <div class="panel-title">Vehicle Registry</div>
+        <div class="table-scroll">
         <table class="data-table">
           <thead><tr><th>ID</th><th>Plate</th><th>Type</th><th>From</th><th>To</th><th>Fuel</th><th>Emergency</th></tr></thead>
           <tbody id="vehicle-table-body"></tbody>
         </table>
+        </div>
       </div>
       <div class="panel">
         <div class="panel-title">Vehicle Statistics</div>

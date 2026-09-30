@@ -17,6 +17,18 @@ function showView(name, evt) {
   if (name === 'city-map')   renderCityMap();
   if (name === 'algorithms') renderAlgorithms();
   if (name === 'mst')        renderMST();
+  closeNav();
+}
+
+// ─── MOBILE NAV DRAWER ───
+function toggleNav() {
+  document.querySelector('.sidebar-nav').classList.toggle('open');
+  document.getElementById('nav-backdrop').classList.toggle('open');
+}
+
+function closeNav() {
+  document.querySelector('.sidebar-nav').classList.remove('open');
+  document.getElementById('nav-backdrop').classList.remove('open');
 }
 
 function toast(msg, type = 'info') {
@@ -89,11 +101,11 @@ function renderDashboard() {
       (adj[j.id] || []).reduce((s, e) => s + e.cong, 0) / Math.max(1, (adj[j.id] || []).length)
     );
     return `<tr>
-      <td style="font-family:'Share Tech Mono',monospace; color:var(--accent)">${j.id}</td>
-      <td>${j.name}</td>
-      <td><span class="zone-tag zone-${j.zone}">${j.zone}</span></td>
-      <td>${j.vehicleCount}</td>
-      <td>
+      <td data-label="ID" style="font-family:'Share Tech Mono',monospace; color:var(--accent)">${j.id}</td>
+      <td data-label="Name">${j.name}</td>
+      <td data-label="Zone"><span class="zone-tag zone-${j.zone}">${j.zone}</span></td>
+      <td data-label="Vehicles">${j.vehicleCount}</td>
+      <td data-label="Congestion">
         <div class="congestion-bar-wrap">
           <div class="congestion-bar"><div class="congestion-fill cong-${cong}" style="width:${cong*10}%"></div></div>
           <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim)">${cong}</span>
@@ -106,9 +118,9 @@ function renderDashboard() {
   document.getElementById('road-congestion-body').innerHTML = sorted.map(r => {
     const cc = `cong-${r.cong}`;
     return `<tr>
-      <td>${r.name}</td>
-      <td>${jName(r.from)} → ${jName(r.to)}</td>
-      <td>
+      <td data-label="Road">${r.name}</td>
+      <td data-label="From→To">${jName(r.from)} → ${jName(r.to)}</td>
+      <td data-label="Congestion">
         <div class="congestion-bar-wrap">
           <div class="congestion-bar"><div class="congestion-fill ${cc}" style="width:${r.cong*10}%"></div></div>
           <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim)">${r.cong}/10</span>
@@ -266,18 +278,18 @@ function renderSignals() {
     if (!s) return '';
     const pclass = s.phase.toLowerCase();
     return `<tr>
-      <td><span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent)">${j.id}</span> ${j.name}</td>
-      <td><span class="zone-tag zone-${j.zone}">${j.zone}</span></td>
-      <td><span class="signal-badge ${pclass}"><span class="signal-dot"></span>${s.phase}</span></td>
-      <td>
+      <td data-label="Junction"><span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent)">${j.id}</span> ${j.name}</td>
+      <td data-label="Zone"><span class="zone-tag zone-${j.zone}">${j.zone}</span></td>
+      <td data-label="Phase"><span class="signal-badge ${pclass}"><span class="signal-dot"></span>${s.phase}</span></td>
+      <td data-label="Density">
         <div class="congestion-bar-wrap">
           <div class="congestion-bar"><div class="congestion-fill cong-${Math.round(s.density/10)}" style="width:${s.density}%"></div></div>
           <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim)">${s.density}%</span>
         </div>
       </td>
-      <td style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--green)">${s.green}s</td>
-      <td style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--red)">${s.red}s</td>
-      <td>${s.emergency ? '<span style="color:var(--red);font-size:10px;font-family:Share Tech Mono,monospace">OVERRIDE</span>' : '—'}</td>
+      <td data-label="Green" style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--green)">${s.green}s</td>
+      <td data-label="Red" style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--red)">${s.red}s</td>
+      <td data-label="Emergency">${s.emergency ? '<span style="color:var(--red);font-size:10px;font-family:Share Tech Mono,monospace">OVERRIDE</span>' : '—'}</td>
     </tr>`;
   }).join('');
 
@@ -399,7 +411,7 @@ function renderMST() {
   const savings = totalDist > 0 ? (100 * (1 - mstDist / totalDist)).toFixed(1) : '0.0';
 
   document.getElementById('mst-summary').innerHTML = `
-    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:0;">
+    <div class="stats-grid stats-grid-3">
       <div class="stat-card" style="--accent-bar:var(--accent2); --accent-color:var(--accent2)">
         <div class="stat-label">Roads Selected</div>
         <div class="stat-value">${mstEdges.length} / ${JUNCTIONS.length - 1}</div>
@@ -419,10 +431,10 @@ function renderMST() {
 
   document.getElementById('mst-table-body').innerHTML = mstEdges.map(r => `
     <tr>
-      <td>${r.name}</td>
-      <td>${jName(r.from)}</td>
-      <td>${jName(r.to)}</td>
-      <td style="font-family:'Share Tech Mono',monospace">${r.dist}m</td>
+      <td data-label="Road Name">${r.name}</td>
+      <td data-label="From">${jName(r.from)}</td>
+      <td data-label="To">${jName(r.to)}</td>
+      <td data-label="Distance" style="font-family:'Share Tech Mono',monospace">${r.dist}m</td>
     </tr>`).join('');
 
   toast(`MST computed: ${mstEdges.length} roads, ${mstDist.toLocaleString()}m total.`, 'success');
@@ -450,15 +462,15 @@ function updateCongestion() {
     // the wrong blocked state when two parallel roads share the same pair.
     const blocked = (adj[r.from]||[]).find(e=>e.road===r)?.blocked;
     return `<tr>
-      <td>${r.name}</td>
-      <td>${jName(r.from)}</td>
-      <td>${jName(r.to)}</td>
-      <td style="font-family:'Share Tech Mono',monospace">${r.dist}m</td>
-      <td><div class="congestion-bar-wrap">
+      <td data-label="Road Name">${r.name}</td>
+      <td data-label="From">${jName(r.from)}</td>
+      <td data-label="To">${jName(r.to)}</td>
+      <td data-label="Distance" style="font-family:'Share Tech Mono',monospace">${r.dist}m</td>
+      <td data-label="Congestion"><div class="congestion-bar-wrap">
         <div class="congestion-bar"><div class="congestion-fill cong-${r.cong}" style="width:${r.cong*10}%"></div></div>
         <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:${col}">${r.cong}/10</span>
       </div></td>
-      <td>${blocked ? '<span style="color:var(--red);font-family:Share Tech Mono,monospace;font-size:10px">BLOCKED</span>' : '<span style="color:var(--green);font-size:10px">OPEN</span>'}</td>
+      <td data-label="Status">${blocked ? '<span style="color:var(--red);font-family:Share Tech Mono,monospace;font-size:10px">BLOCKED</span>' : '<span style="color:var(--green);font-size:10px">OPEN</span>'}</td>
     </tr>`;
   }).join('');
 }
@@ -473,16 +485,16 @@ function renderRoads() {
     const edge = (adj[r.from]||[]).find(e=>e.road===r);
     const blocked = edge?.blocked;
     return `<tr>
-      <td>${r.name}</td>
-      <td>${jName(r.from)}</td>
-      <td>${jName(r.to)}</td>
-      <td style="font-family:'Share Tech Mono',monospace">${r.dist}</td>
-      <td style="text-align:center">${r.bidir?'↔':'→'}</td>
-      <td><div class="congestion-bar-wrap">
+      <td data-label="Road Name">${r.name}</td>
+      <td data-label="From">${jName(r.from)}</td>
+      <td data-label="To">${jName(r.to)}</td>
+      <td data-label="Distance (m)" style="font-family:'Share Tech Mono',monospace">${r.dist}</td>
+      <td data-label="Bidirectional" style="text-align:center">${r.bidir?'↔':'→'}</td>
+      <td data-label="Congestion"><div class="congestion-bar-wrap">
         <div class="congestion-bar"><div class="congestion-fill cong-${r.cong}" style="width:${r.cong*10}%"></div></div>
         <span style="font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--text-dim)">${r.cong}/10</span>
       </div></td>
-      <td>${blocked
+      <td data-label="Status">${blocked
         ? '<span style="color:var(--red);font-family:Share Tech Mono,monospace;font-size:10px">🚧 BLOCKED</span>'
         : '<span style="color:var(--green);font-size:10px">OPEN</span>'
       }</td>
@@ -590,18 +602,18 @@ function renderVehicles() {
     const isEmerg = EMERGENCY_TYPES.includes(v.type);
     const fuelCol = v.fuel > 70 ? 'var(--green)' : v.fuel > 30 ? 'var(--yellow)' : 'var(--red)';
     return `<tr>
-      <td style="font-family:'Share Tech Mono',monospace;color:var(--accent)">${v.id}</td>
-      <td style="font-family:'Share Tech Mono',monospace;font-size:11px">${v.plate}</td>
-      <td><span class="vtype ${v.type}">${v.type}</span></td>
-      <td>${jName(v.from)}</td>
-      <td>${jName(v.to)}</td>
-      <td>
+      <td data-label="ID" style="font-family:'Share Tech Mono',monospace;color:var(--accent)">${v.id}</td>
+      <td data-label="Plate" style="font-family:'Share Tech Mono',monospace;font-size:11px">${v.plate}</td>
+      <td data-label="Type"><span class="vtype ${v.type}">${v.type}</span></td>
+      <td data-label="From">${jName(v.from)}</td>
+      <td data-label="To">${jName(v.to)}</td>
+      <td data-label="Fuel">
         <div class="congestion-bar-wrap">
           <div class="congestion-bar"><div class="congestion-fill" style="width:${v.fuel}%;background:${fuelCol}"></div></div>
           <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:${fuelCol}">${v.fuel.toFixed(1)}%</span>
         </div>
       </td>
-      <td>${isEmerg ? '<span style="color:var(--red);font-size:11px;">⚠ YES</span>' : '—'}</td>
+      <td data-label="Emergency">${isEmerg ? '<span style="color:var(--red);font-size:11px;">⚠ YES</span>' : '—'}</td>
     </tr>`;
   }).join('');
 
